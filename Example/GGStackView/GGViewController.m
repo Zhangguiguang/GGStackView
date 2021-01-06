@@ -8,6 +8,7 @@
 
 #import "GGViewController.h"
 #import <GGStackView/GGStackView.h>
+#import <GGStackView/UIStackView+GGCustomSpacing.h>
 
 @interface GGViewController ()
 
@@ -31,7 +32,8 @@
     [view setTitle:[NSString stringWithFormat:@"%ld", customSpacing] forState:UIControlStateNormal];
     
     // Always can use, support from iOS 9.0
-    [self.stackView ggSetCustomSpacing:customSpacing afterView:view];
+//    [self.stackView ggSetCustomSpacing:customSpacing afterView:view];
+    [self.stackView gg_SetCustomSpacing:customSpacing afterView:view];
     
     // Only can use after iOS 11.0
 //    if (@available(iOS 11.0, *)) {

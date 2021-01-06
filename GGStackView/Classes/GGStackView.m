@@ -25,8 +25,8 @@
         or
         next.leading = target.trailing + spacing
      */
-    __block NSArray<NSLayoutConstraint *> *firstContstraints = nil;
-    [self.ggCustomSpacing.keyEnumerator.allObjects enumerateObjectsUsingBlock:^(UIView *view, NSUInteger _1, BOOL *_2) {
+    __block NSMutableArray<NSLayoutConstraint *> *firstContstraints = nil;
+    [self.ggCustomSpacing.keyEnumerator.allObjects enumerateObjectsUsingBlock:^(UIView *view, NSUInteger _, BOOL *stop) {
         if (![view.superview isEqual:self]) {
             // view is removed from self
             [self.ggCustomSpacing removeObjectForKey:view];
@@ -35,7 +35,10 @@
         if (firstContstraints == nil) {
             NSLayoutAttribute firstAttribute = self.axis == UILayoutConstraintAxisVertical ? NSLayoutAttributeTop : NSLayoutAttributeLeading;
             NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.firstAttribute == %ld", firstAttribute];
-            firstContstraints = [self.constraints filteredArrayUsingPredicate:predicate];
+            firstContstraints = [[self.constraints filteredArrayUsingPredicate:predicate] mutableCopy];
+        }
+        if (firstContstraints.count == 0) {
+            *stop = YES; return; // break;
         }
         
         NSLayoutAttribute secondAttribute = self.axis == UILayoutConstraintAxisVertical ? NSLayoutAttributeBottom : NSLayoutAttributeTrailing;
@@ -43,6 +46,7 @@
         NSArray<NSLayoutConstraint *> *matchedConstraints = [firstContstraints filteredArrayUsingPredicate:predicate2];
         if (matchedConstraints.count > 0) {
             matchedConstraints.firstObject.constant = [self ggCustomSpacingAfterView:view];
+            [firstContstraints removeObjectsInArray:matchedConstraints];
         }
     }];
 }
@@ -57,11 +61,6 @@
 - (void)ggSetCustomSpacing:(CGFloat)spacing afterView:(UIView *)view {
     if (![self.arrangedSubviews containsObject:view]) {
         return;
-    }
-    if (self.spacing == spacing) {
-        if ([self.ggCustomSpacing objectForKey:view] == nil) {
-            return;
-        }
     }
     [self.ggCustomSpacing setObject:@(spacing) forKey:view];
     [self setNeedsUpdateConstraints];

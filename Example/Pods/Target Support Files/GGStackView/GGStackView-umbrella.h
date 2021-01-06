@@ -11,6 +11,7 @@
 #endif
 
 #import "GGStackView.h"
+#import "UIStackView+GGCustomSpacing.h"
 
 FOUNDATION_EXPORT double GGStackViewVersionNumber;
 FOUNDATION_EXPORT const unsigned char GGStackViewVersionString[];
