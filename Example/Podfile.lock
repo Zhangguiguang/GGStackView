@@ -1,0 +1,16 @@
+PODS:
+  - GGStackView (0.1.0)
+
+DEPENDENCIES:
+  - GGStackView (from `../`)
+
+EXTERNAL SOURCES:
+  GGStackView:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  GGStackView: 88d3c11fd016a2f9ed6e36bb7a862b46ffc652a7
+
+PODFILE CHECKSUM: 163352e88b1aefc3bf8b98efd3b32393b301cb88
+
+COCOAPODS: 1.8.4
