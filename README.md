@@ -28,10 +28,13 @@ If you want set `UIStackView` custom spacing below iOS 11.0, you can use
 
 ```
 // UIStackView+GGCustomSpacing.h
-- gg_SetCustomSpacing: afterView:
+- gg_setCustomSpacing: afterView:
 
+```
+```
 // GGStackView.h
-- ggSetCustomSpacing: afterView:
+// Exactly the same as the system method
+- setCustomSpacing: afterView:
 ```
 
 ## Author
