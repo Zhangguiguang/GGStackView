@@ -8,15 +8,16 @@
 #import "GGStackView.h"
 
 @interface GGStackView ()
-
 @property (nonatomic, strong) NSMapTable<UIView *, NSNumber *> *ggCustomSpacing;
-
 @end
 
 @implementation GGStackView
 
 - (void)updateConstraints {
     [super updateConstraints];
+    if (@available(iOS 11.0, *)) {
+        return;
+    }
     
     /**
      layout constraints should like this
@@ -26,10 +27,10 @@
         next.leading = target.trailing + spacing
      */
     __block NSMutableArray<NSLayoutConstraint *> *firstContstraints = nil;
-    [self.ggCustomSpacing.keyEnumerator.allObjects enumerateObjectsUsingBlock:^(UIView *view, NSUInteger _, BOOL *stop) {
+    [_ggCustomSpacing.keyEnumerator.allObjects enumerateObjectsUsingBlock:^(UIView *view, NSUInteger _, BOOL *stop) {
         if (![view.superview isEqual:self]) {
             // view is removed from self
-            [self.ggCustomSpacing removeObjectForKey:view];
+            [_ggCustomSpacing removeObjectForKey:view];
             return;
         }
         if (firstContstraints == nil) {
@@ -45,20 +46,24 @@
         NSPredicate *predicate2 = [NSPredicate predicateWithFormat:@"SELF.secondItem == %@ AND SELF.secondAttribute == %ld", view, secondAttribute];
         NSArray<NSLayoutConstraint *> *matchedConstraints = [firstContstraints filteredArrayUsingPredicate:predicate2];
         if (matchedConstraints.count > 0) {
-            matchedConstraints.firstObject.constant = [self ggCustomSpacingAfterView:view];
+            matchedConstraints.firstObject.constant = [self customSpacingAfterView:view];
             [firstContstraints removeObjectsInArray:matchedConstraints];
         }
     }];
 }
 
 - (void)removeArrangedSubview:(UIView *)view {
-    [self.ggCustomSpacing removeObjectForKey:view];
+    [_ggCustomSpacing removeObjectForKey:view];
     [super removeArrangedSubview:view];
 }
 
 #pragma mark - Custom Spacing
 
-- (void)ggSetCustomSpacing:(CGFloat)spacing afterView:(UIView *)view {
+- (void)setCustomSpacing:(CGFloat)spacing afterView:(UIView *)view {
+    if (@available(iOS 11.0, *)) {
+        [super setCustomSpacing:spacing afterView:view];
+        return;
+    }
     if (![self.arrangedSubviews containsObject:view]) {
         return;
     }
@@ -66,9 +71,15 @@
     [self setNeedsUpdateConstraints];
 }
 
-- (CGFloat)ggCustomSpacingAfterView:(UIView *)arrangedSubview {
-    return [[self.ggCustomSpacing objectForKey:arrangedSubview] doubleValue];
+- (CGFloat)customSpacingAfterView:(UIView *)arrangedSubview {
+    if (@available(iOS 11.0, *)) {
+        return [super customSpacingAfterView:arrangedSubview];
+    } else {
+        return [[_ggCustomSpacing objectForKey:arrangedSubview] doubleValue];
+    }
 }
+
+#pragma mark - Property
 
 - (NSMapTable<UIView *,NSNumber *> *)ggCustomSpacing {
     if (!_ggCustomSpacing) {

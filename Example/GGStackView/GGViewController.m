@@ -14,7 +14,8 @@
 
 @property (nonatomic, strong) NSMutableArray<UIView *> *viewArray;
 
-@property (nonatomic, strong) GGStackView *stackView;
+@property (nonatomic, strong) UIStackView *uiStackView;
+@property (nonatomic, strong) GGStackView *ggStackView;
 
 @end
 
@@ -24,38 +25,53 @@
     [super viewDidLoad];
     
     [self makeSubview];
-    [self makeStackView];
+    
+    [self testUIStackView];
 }
 
 - (void)didClickView:(UIButton *)view {
     NSInteger customSpacing = (arc4random() % 10) * 10;
     [view setTitle:[NSString stringWithFormat:@"%ld", customSpacing] forState:UIControlStateNormal];
     
-    // Always can use, support from iOS 9.0
-//    [self.stackView ggSetCustomSpacing:customSpacing afterView:view];
-    [self.stackView gg_SetCustomSpacing:customSpacing afterView:view];
+    if (_ggStackView) {
+        // Can always be used, supported since iOS9.0
+        [_ggStackView setCustomSpacing:customSpacing afterView:view];
+    }
     
-    // Only can use after iOS 11.0
-//    if (@available(iOS 11.0, *)) {
-//        [self.stackView setCustomSpacing:customSpacing afterView:view];
-//    }
+    if (_uiStackView) {
+        // Can always be used, supported since iOS9.0
+        [_uiStackView gg_setCustomSpacing:customSpacing afterView:view];
+        
+        // You can also use this method with confidence, if you don’t care about the warning ⚠️
+        // In fact, it supports iOS9.0 and will not crash
+        [_uiStackView setCustomSpacing:customSpacing afterView:view];
+    }
     
 //    [UIView animateWithDuration:0.1 animations:^{
-//        [self.stackView setNeedsLayout];
-//        [self.stackView layoutIfNeeded];
+//        [_ggStackView setNeedsLayout];
+//        [_ggStackView layoutIfNeeded];
 //    }];
 }
 
-- (void)makeStackView {
-    _stackView = [[GGStackView alloc] initWithArrangedSubviews:self.viewArray];
-    _stackView.axis = UILayoutConstraintAxisVertical;
-    _stackView.spacing = 20;
-    _stackView.alignment = UIStackViewAlignmentCenter;
+- (void)testUIStackView {
+    _uiStackView = [[UIStackView alloc] initWithArrangedSubviews:self.viewArray];
+    [self configStackView:_uiStackView];
+}
+
+- (void)testGGStackView {
+    _ggStackView = [[GGStackView alloc] initWithArrangedSubviews:self.viewArray];
+    [self configStackView:_ggStackView];
+}
+
+- (void)configStackView:(UIStackView *)stackView {
+    stackView.axis = UILayoutConstraintAxisHorizontal;
+    stackView.spacing = 20;
+    stackView.alignment = UIStackViewAlignmentCenter;
     
-    [self.view addSubview:_stackView];
-    _stackView.translatesAutoresizingMaskIntoConstraints = NO;
-    [_stackView.topAnchor constraintEqualToAnchor:self.view.topAnchor constant:100].active = YES;
-    [_stackView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:30].active = YES;
+    [self.view addSubview:stackView];
+    stackView.translatesAutoresizingMaskIntoConstraints = NO;
+    [stackView.topAnchor constraintEqualToAnchor:self.view.topAnchor constant:100].active = YES;
+    [stackView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:30].active = YES;
 }
 
 - (void)makeSubview {

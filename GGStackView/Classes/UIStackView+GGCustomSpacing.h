@@ -11,10 +11,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UIStackView (GGCustomSpacing)
 
-/// 与系统方法 -setCustomSpacing:afterView: 功能一模一样，但是它兼容 11.0 以下的 iOS 版本
-- (void)gg_SetCustomSpacing:(CGFloat)spacing afterView:(UIView *)arrangedSubview;
+/// 与系统方法 -setCustomSpacing:afterView: 功能一模一样，但是它兼容 iOS11.0 以下的版本
+/// The function is exactly the same as the system method -setCustomSpacing:afterView:, but it is compatible with versions below iOS11.0
+- (void)gg_setCustomSpacing:(CGFloat)spacing afterView:(UIView *)arrangedSubview;
+- (CGFloat)gg_customSpacingAfterView:(UIView *)arrangedSubview;
 
-- (CGFloat)gg_CustomSpacingAfterView:(UIView *)arrangedSubview;
+
+/// 你也可以放心大胆的使用这个方法，如果你不在意警告的话 ⚠️
+/// You can also use this method with confidence, if you don’t care about the warning ⚠️
+- (void)setCustomSpacing:(CGFloat)spacing afterView:(UIView *)arrangedSubview API_AVAILABLE(ios(9.0));
+- (CGFloat)customSpacingAfterView:(UIView *)arrangedSubview API_AVAILABLE(ios(9.0));
 
 @end
 
