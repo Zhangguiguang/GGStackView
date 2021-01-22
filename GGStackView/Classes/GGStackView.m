@@ -75,7 +75,12 @@
     if (@available(iOS 11.0, *)) {
         return [super customSpacingAfterView:arrangedSubview];
     } else {
-        return [[_ggCustomSpacing objectForKey:arrangedSubview] doubleValue];
+        NSNumber *value = [_ggCustomSpacing objectForKey:arrangedSubview];
+        if (value) {
+            return [value doubleValue];
+        } else {
+            return GGStackViewSpacingUseDefault;
+        }
     }
 }
 

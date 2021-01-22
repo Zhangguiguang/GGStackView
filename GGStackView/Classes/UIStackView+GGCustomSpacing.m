@@ -108,7 +108,12 @@
     if (@available(iOS 11.0, *)) {
         return [self customSpacingAfterView:view];
     } else {
-        return [[self.gg_customSpacing objectForKey:view] doubleValue];
+        NSNumber *value = [self.gg_customSpacing objectForKey:view];
+        if (value) {
+            return [value doubleValue];
+        } else {
+            return GGStackViewSpacingUseDefault;
+        }
     }
 }
 

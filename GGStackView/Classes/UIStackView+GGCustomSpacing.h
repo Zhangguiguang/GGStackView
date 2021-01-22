@@ -9,6 +9,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+static const CGFloat GGStackViewSpacingUseDefault = FLT_MAX;
+
 @interface UIStackView (GGCustomSpacing)
 
 /// 与系统方法 -setCustomSpacing:afterView: 功能一模一样，但是它兼容 iOS11.0 以下的版本

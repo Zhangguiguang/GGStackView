@@ -26,10 +26,12 @@
     
     [self makeSubview];
     
-    [self testUIStackView];
+    [self testGGStackView];
 }
 
 - (void)didClickView:(UIButton *)view {
+    NSLog(@".... %lf", [_ggStackView customSpacingAfterView:view]);
+    
     NSInteger customSpacing = (arc4random() % 10) * 10;
     [view setTitle:[NSString stringWithFormat:@"%ld", customSpacing] forState:UIControlStateNormal];
     
@@ -64,14 +66,14 @@
 }
 
 - (void)configStackView:(UIStackView *)stackView {
-    stackView.axis = UILayoutConstraintAxisHorizontal;
+    stackView.axis = UILayoutConstraintAxisVertical;
     stackView.spacing = 20;
     stackView.alignment = UIStackViewAlignmentCenter;
     
     [self.view addSubview:stackView];
     stackView.translatesAutoresizingMaskIntoConstraints = NO;
     [stackView.topAnchor constraintEqualToAnchor:self.view.topAnchor constant:100].active = YES;
-    [stackView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:30].active = YES;
+    [stackView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:100].active = YES;
 }
 
 - (void)makeSubview {
@@ -87,7 +89,7 @@
     UIButton *view = [UIButton new];
     view.backgroundColor = color;
     view.translatesAutoresizingMaskIntoConstraints = NO;
-    [view.widthAnchor constraintEqualToConstant:44].active = YES;
+    [view.widthAnchor constraintEqualToConstant:100].active = YES;
     [view.heightAnchor constraintEqualToConstant:44].active = YES;
     [view addTarget:self action:@selector(didClickView:) forControlEvents:UIControlEventTouchUpInside];
     
